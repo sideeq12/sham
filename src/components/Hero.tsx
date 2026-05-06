@@ -104,8 +104,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="text-white/70 text-lg sm:text-xl max-w-xl mx-auto mb-10 leading-relaxed"
         >
-          Where fresh organic ingredients meet bold Middle Eastern flavors.
-          Handcrafted shawarma, crisp salads, and wraps that nourish your body and delight your soul.
+          The shawarma that talks back. Fresh organic shawarma, crisp salads, and handcrafted wraps that nourish your body and delight your soul.
         </motion.p>
 
         <motion.div
