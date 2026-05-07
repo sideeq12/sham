@@ -16,7 +16,7 @@ const items = [
   {
     title: 'Beef Shawarma',
     desc: 'Sautéed beef with special sauce, slow-marinated for deep, rich flavor in every single bite.',
-    price: '$15',
+    price: '$14',
     badge: 'Premium',
     img: beefWrap,
     rating: 4.8,
@@ -25,7 +25,7 @@ const items = [
   {
     title: 'Mixed Combo',
     desc: 'The best of both worlds — chicken & beef together with all the fixings. Pure satisfaction.',
-    price: '$18',
+    price: '$15',
     badge: 'Combo Deal',
     img: bowlTop,
     rating: 4.9,
