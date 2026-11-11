@@ -40,20 +40,12 @@ export default function CTA() {
                 </span>
               </div>
             </motion.div>
-            <motion.span
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="inline-flex items-center gap-2 bg-brand-green-800/30 border border-brand-green-500/20 text-brand-green-300 font-bold text-xs tracking-[0.2em] uppercase px-5 py-2.5 rounded-full mb-6 backdrop-blur-sm"
-            >
-              <span className="w-2.5 h-2.5 rounded-full bg-brand-green-400 animate-pulse-soft" />
-              Fresh Batch Ready — Order Now
-            </motion.span>
             <h2 className="font-serif font-bold text-4xl sm:text-5xl lg:text-6xl text-white mb-6">
               Ready for a{' '}
               <em className="italic text-brand-green-300">Fresh</em> Bite?
             </h2>
             <p className="text-white/55 text-lg sm:text-xl max-w-2xl mx-auto mb-12">
-              Dine in, pickup, or get it delivered. Your organic shawarma is waiting — fresh off the spit.
+              Request pickup or delivery in Balch Springs through WhatsApp.
             </p>
           </div>
         </ScrollReveal>
@@ -65,7 +57,7 @@ export default function CTA() {
               title: 'Call or Text',
               desc: 'Speak directly with us',
               detail: PHONE,
-              href: `tel:${PHONE_RAW}`,
+              href: `tel:+${PHONE_RAW}`,
             },
             {
               icon: <FiMail size={26} />,
@@ -76,8 +68,8 @@ export default function CTA() {
             },
             {
               icon: <FiMapPin size={26} />,
-              title: 'Visit Us',
-              desc: 'Dine-in experience',
+              title: 'Serving',
+              desc: 'Confirm pickup details in WhatsApp',
               detail: ADDRESS,
               href: null,
             },

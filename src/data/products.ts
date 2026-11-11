@@ -1,7 +1,4 @@
-import shawarmaClose from '../images/An_ultra-realistic_creamy_chicken_shawarma_202605031628.jpeg'
-import beefWrap from '../images/A_realistic_street-style_creamy_chicken_202605031658.jpeg'
-import bowlTop from '../images/A_top-down_ultra-realistic_shot_of_202605031652.jpeg'
-import { gingerDrink1, gingerDrink2, gingerDrink3, gingerDrink4 } from '../images'
+import { shawarmaClose, beefWrap, bowlTop, gingerDrink1, gingerDrink2, gingerDrink4 } from '../images'
 
 export interface Product {
   id: string

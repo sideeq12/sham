@@ -1,43 +1,9 @@
 import { motion } from 'framer-motion'
-import { FiStar } from 'react-icons/fi'
 import ScrollReveal from './ScrollReveal'
-import { shawarmaClose, beefWrap, bowlTop, combo1 } from '../images'
+import { combo1 } from '../images'
+import { products, addons } from '../data/products'
 
-const items = [
-  {
-    title: 'Chicken Shawarma',
-    desc: 'Sautéed grilled chicken with sausage, fresh salad & our signature special sauce.',
-    price: '$13',
-    badge: 'Bestseller',
-    img: shawarmaClose,
-    rating: 4.9,
-    reviews: 1243,
-  },
-  {
-    title: 'Beef Shawarma',
-    desc: 'Sautéed beef with special sauce, slow-marinated for deep, rich flavor in every single bite.',
-    price: '$14',
-    badge: 'Premium',
-    img: beefWrap,
-    rating: 4.8,
-    reviews: 987,
-  },
-  {
-    title: 'Mixed Combo',
-    desc: 'The best of both worlds — chicken & beef together with all the fixings. Pure satisfaction.',
-    price: '$15',
-    badge: 'Combo Deal',
-    img: bowlTop,
-    rating: 4.9,
-    reviews: 756,
-  },
-]
-
-const addons = [
-  { icon: '🌶️', label: 'Extra Spicy' },
-  { icon: '🧀', label: 'Extra Cheese' },
-  { icon: '🧅', label: 'Extra Onions' },
-]
+const items = products.filter((product) => product.category === 'shawarma')
 
 export default function Featured() {
   return (
@@ -61,7 +27,7 @@ export default function Featured() {
               Our Signature <em className="italic text-brand-green-700">Shawarma</em>
             </h2>
             <p className="text-gray-500 text-lg max-w-xl mx-auto">
-              Crafted with the freshest organic ingredients, bold spices, and flame-grilled to perfection.
+              Choose chicken, beef, or a mix of both.
             </p>
           </div>
         </ScrollReveal>
@@ -71,34 +37,26 @@ export default function Featured() {
             <ScrollReveal key={i} delay={i * 0.15}>
               <motion.div
                 whileHover={{ y: -10 }}
-                className="group bg-white rounded-3xl overflow-hidden shadow-[0_2px_20px_rgba(0,0,0,0.04)] hover:shadow-2xl hover:shadow-brand-green-900/5 transition-all duration-500 cursor-pointer border border-brand-green-100/50"
+                className="group bg-white rounded-3xl overflow-hidden shadow-[0_2px_20px_rgba(0,0,0,0.04)] hover:shadow-2xl hover:shadow-brand-green-900/5 transition-all duration-500 border border-brand-green-100/50"
               >
                 <div className="relative h-64 overflow-hidden">
                   <img
                     src={item.img}
-                    alt={item.title}
+                    alt={item.name}
                     loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <span className="absolute top-4 left-4 bg-brand-green-600 text-white text-xs font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-lg flex items-center gap-1.5">
-                    🍃 {item.badge}
-                  </span>
                 </div>
                 <div className="p-6">
                   <h3 className="font-serif font-bold text-xl text-brand-dark mb-2 group-hover:text-brand-green-700 transition-colors duration-300">
-                    {item.title}
+                    {item.name}
                   </h3>
                   <p className="text-gray-500 text-sm leading-relaxed mb-4">{item.desc}</p>
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="font-serif font-extrabold text-3xl text-brand-green-700">{item.price}</span>
+                      <span className="font-serif font-extrabold text-3xl text-brand-green-700">${item.price}</span>
                       <span className="text-gray-400 text-sm ml-1">/ each</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-brand-orange-400">
-                      <FiStar size={16} className="fill-current" />
-                      <span className="font-semibold text-sm">{item.rating}</span>
-                      <span className="text-gray-400 text-xs">({item.reviews})</span>
                     </div>
                   </div>
                 </div>
@@ -142,9 +100,9 @@ export default function Featured() {
                 <motion.div
                   key={i}
                   whileHover={{ scale: 1.05 }}
-                  className="flex items-center gap-2 bg-brand-cream border border-brand-green-100/40 hover:border-brand-orange-300 rounded-full px-5 py-3 cursor-pointer transition-all duration-300 hover:shadow-md"
+                  className="flex items-center gap-2 bg-brand-cream border border-brand-green-100/40 hover:border-brand-orange-300 rounded-full px-5 py-3 transition-all duration-300 hover:shadow-md"
                 >
-                  <span className="text-xl">{a.icon}</span>
+                  <span className="text-xl">{a.emoji}</span>
                   <span className="font-semibold text-sm text-brand-dark">{a.label}</span>
                 </motion.div>
               ))}

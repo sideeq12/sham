@@ -1,49 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { products } from '../data/products'
 import ScrollReveal from './ScrollReveal'
 import { gingerDrink1, gingerDrink2, gingerDrink3, gingerDrink4 } from '../images'
 
 const drinkImages = [gingerDrink1, gingerDrink2, gingerDrink3, gingerDrink4]
 
-const drinks = [
-  {
-    img: gingerDrink1,
-    title: '4oz Mini Bottle',
-    price: '$4',
-    desc: 'Ginger drink taster with a sharp palate, focused on flavour, spice balance, and quality.',
-  },
-  {
-    img: gingerDrink2,
-    title: 'Mini Magic 12oz Plastic Bottle',
-    price: '$6',
-    desc: 'On-the-go boost of ginger goodness; convenient, refreshing, and travel-ready.',
-  },
-  {
-    img: gingerDrink1,
-    title: 'Pouch It 250ml 5 Pouch',
-    price: '$8',
-    desc: 'A small pouch packed with big ginger flavor in every single sip.',
-  },
-  {
-    img: gingerDrink1,
-    title: 'More Ginger More Glow – 500ml',
-    price: '$10',
-    desc: 'On-the-go boost of ginger goodness; convenient, refreshing, and travel-ready.',
-  },
-  {
-    img: gingerDrink4,
-    title: 'Bigger Sip, Better Kick – 1.3 Gal',
-    price: '$25',
-    desc: 'Full ginger power; bold ginger blast in a large pouch with no holding back.',
-  },
-]
-
-const benefits = [
-  'Packed with flavor',
-  'Boosts immunity',
-  'Supports digestion',
-  '100% natural goodness',
-]
+const drinks = products.filter((product) => product.category === 'drink')
 
 export default function MenuTeaser() {
   const [heroIndex, setHeroIndex] = useState(0)
@@ -76,7 +39,7 @@ export default function MenuTeaser() {
               Refreshing Ginger <em className="italic text-brand-green-300">Drinks</em>
             </h2>
             <p className="text-white/45 text-lg max-w-xl mx-auto">
-              Bold, spicy, and 100% natural — our ginger rush lineup delivers pure refreshment in every sip.
+              Choose from five sizes, from a 4 oz taster to a 1.3-gallon pouch.
             </p>
           </div>
         </ScrollReveal>
@@ -90,6 +53,7 @@ export default function MenuTeaser() {
             <AnimatePresence mode="wait">
               <motion.img
                 key={heroIndex}
+                loading="lazy"
                 src={drinkImages[heroIndex]}
                 alt="B'licious Ginger Rush Drinks"
                 initial={{ opacity: 0, scale: 1.03 }}
@@ -132,33 +96,22 @@ export default function MenuTeaser() {
             <ScrollReveal key={i} delay={i * 0.08}>
               <motion.div
                 whileHover={{ y: -5, scale: 1.02 }}
-                className="group bg-white/[0.03] border border-white/[0.05] hover:border-brand-orange-400/25 rounded-2xl p-6 text-center transition-all duration-300 cursor-pointer hover:bg-white/[0.06] relative overflow-hidden"
+                className="group bg-white/[0.03] border border-white/[0.05] hover:border-brand-orange-400/25 rounded-2xl p-6 text-center transition-all duration-300 hover:bg-white/[0.06] relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 w-20 h-20 opacity-0 group-hover:opacity-[0.04] transition-opacity duration-500 pointer-events-none text-5xl select-none">
                   🫚
                 </div>
                 <div className="w-16 h-16 rounded-full overflow-hidden mx-auto mb-4 group-hover:scale-110 transition-all duration-300 ring-2 ring-brand-green-700/30 group-hover:ring-brand-orange-400/40">
-                  <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
+                  <img loading="lazy" src={item.img} alt={item.name} className="w-full h-full object-cover" />
                 </div>
-                <h3 className="font-serif font-bold text-white text-lg mb-1.5">{item.title}</h3>
-                <span className="inline-block font-serif font-extrabold text-2xl text-brand-orange-400 mb-2.5">{item.price}</span>
+                <h3 className="font-serif font-bold text-white text-lg mb-1.5">{item.name}</h3>
+                <span className="inline-block font-serif font-extrabold text-2xl text-brand-orange-400 mb-2.5">${item.price}</span>
                 <p className="text-white/35 text-sm leading-relaxed">{item.desc}</p>
               </motion.div>
             </ScrollReveal>
           ))}
         </div>
 
-        {/* Benefits bar */}
-        <ScrollReveal delay={0.3}>
-          <div className="flex flex-wrap justify-center items-center gap-5 sm:gap-8 px-6 py-5 rounded-2xl bg-white/[0.03] border border-white/[0.05]">
-            {benefits.map((b, i) => (
-              <div key={i} className="flex items-center gap-2 text-white/55 text-sm">
-                <span className="w-2 h-2 rounded-full bg-brand-green-400" />
-                <span>{b}</span>
-              </div>
-            ))}
-          </div>
-        </ScrollReveal>
       </div>
 
       <div className="organic-divider organic-divider-dark" />

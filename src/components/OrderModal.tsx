@@ -19,10 +19,11 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
   const [cart, setCart] = useState<Map<string, OrderItem>>(new Map())
   const [selectedAddons, setSelectedAddons] = useState<Set<string>>(new Set())
   const [note, setNote] = useState('')
+  const [fulfillment, setFulfillment] = useState<'pickup' | 'delivery'>('pickup')
   const [address, setAddress] = useState('')
   const [step, setStep] = useState<'browse' | 'review'>('browse')
 
-  const total = Array.from(cart.values()).reduce(
+  const subtotal = Array.from(cart.values()).reduce(
     (sum, item) => sum + item.product.price * item.quantity,
     0
   )
@@ -69,10 +70,7 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
 
   const buildWhatsAppMessage = () => {
     const cartItems = Array.from(cart.values())
-    const divider = '─'.repeat(30)
-
-    let msg = `*B'LICIOUS — NEW ORDER*\n`
-    msg += `${divider}\n\n`
+    let msg = `*B'LICIOUS — NEW ORDER*\n\n`
 
     msg += `ITEMS:\n`
     cartItems.forEach((item) => {
@@ -92,10 +90,12 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
       msg += `\nNOTE: ${note.trim()}\n`
     }
 
-    msg += `\n${divider}\n`
-    msg += `*TOTAL: $${total.toFixed(2)}*\n\n`
-    msg += `DELIVERY TO: ${address.trim() || ADDRESS}\n`
-    msg += `Please confirm my order. Thank you!`
+    msg += '\n'
+    msg += `*ITEM SUBTOTAL: $${subtotal.toFixed(2)}*\n\n`
+    msg += fulfillment === 'delivery'
+      ? `DELIVERY TO: ${address.trim()}\n`
+      : `PICKUP IN: ${ADDRESS}\n`
+    msg += 'Please confirm availability, timing, final total, and payment options. Thank you!'
 
     return encodeURIComponent(msg)
   }
@@ -106,6 +106,7 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
   }
 
   const cartArray = Array.from(cart.values())
+  const canReview = cartArray.length > 0 && (fulfillment === 'pickup' || address.trim().length > 0)
 
   return (
     <AnimatePresence>
@@ -312,10 +313,11 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
 
                 {/* Note */}
                 <div>
-                  <label className="font-serif font-bold text-sm text-brand-green-700 uppercase tracking-wide mb-2 block">
+                  <label htmlFor="order-note" className="font-serif font-bold text-sm text-brand-green-700 uppercase tracking-wide mb-2 block">
                     📝 Special Instructions
                   </label>
                   <textarea
+                    id="order-note"
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     placeholder="Any allergies or special requests..."
@@ -323,19 +325,39 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
                   />
                 </div>
 
-                {/* Address */}
-                <div>
-                  <label className="font-serif font-bold text-sm text-brand-green-700 uppercase tracking-wide mb-2 block">
-                    📍 Delivery Address
-                  </label>
-                  <input
-                    type="text"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Enter your delivery address..."
-                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:border-brand-green-300 focus:ring-2 focus:ring-brand-green-100 outline-none text-sm transition-all"
-                  />
-                </div>
+                <fieldset>
+                  <legend className="mb-2 font-semibold text-brand-dark">Pickup or delivery</legend>
+                  <div className="flex flex-wrap gap-4">
+                    {(['pickup', 'delivery'] as const).map((option) => (
+                      <label key={option} className="flex min-h-11 items-center gap-2 capitalize">
+                        <input
+                          type="radio"
+                          name="fulfillment"
+                          value={option}
+                          checked={fulfillment === option}
+                          onChange={() => setFulfillment(option)}
+                        />
+                        {option}
+                      </label>
+                    ))}
+                  </div>
+                  {fulfillment === 'delivery' ? (
+                    <label className="block text-sm font-medium text-brand-dark">
+                      Delivery address (required)
+                      <input
+                        type="text"
+                        autoComplete="street-address"
+                        required
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        placeholder="Street address, city, and ZIP"
+                        className="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3"
+                      />
+                    </label>
+                  ) : (
+                    <p className="text-sm text-gray-600">Pickup in {ADDRESS}. We’ll confirm the pickup address in WhatsApp.</p>
+                  )}
+                </fieldset>
               </div>
             ) : (
               /* Review step */
@@ -378,24 +400,18 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
                     <p className="text-sm text-brand-dark">{note}</p>
                   </div>
                 )}
-                {address.trim() && (
-                  <div className="py-2 border-b border-gray-100">
-                    <div className="text-xs text-gray-400">Delivery to:</div>
-                    <p className="text-sm font-medium text-brand-dark">{address.trim()}</p>
-                  </div>
-                )}
-                <div className="flex justify-between items-center pt-2">
-                  <span className="font-serif font-bold text-lg text-brand-dark">Total</span>
-                  <span className="font-serif font-extrabold text-2xl text-brand-green-700">
-                    ${total.toFixed(2)}
+                <div className="border-b border-gray-100 py-2 text-sm text-brand-dark">
+                  {fulfillment === 'delivery' ? `Delivery to ${address.trim()}` : `Pickup in ${ADDRESS}`}
+                </div>
+                <div className="flex items-center justify-between pt-2">
+                  <span className="font-serif text-lg font-bold text-brand-dark">Item subtotal</span>
+                  <span className="font-serif text-2xl font-extrabold text-brand-green-700">
+                    ${subtotal.toFixed(2)}
                   </span>
                 </div>
-                <button
-                  onClick={() => setStep('browse')}
-                  className="text-sm text-brand-green-600 font-medium hover:underline"
-                >
-                  ← Back to menu
-                </button>
+                <p className="text-sm text-gray-600">
+                  We’ll confirm availability, timing, any taxes or fees, the final total, and payment options in WhatsApp.
+                </p>
               </div>
             )}
 
@@ -404,15 +420,15 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
               {step === 'browse' ? (
                 <button
                   onClick={() => setStep('review')}
-                  disabled={cartArray.length === 0}
+                  disabled={!canReview}
                   className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-base transition-all duration-300 ${
-                    cartArray.length === 0
+                    !canReview
                       ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                       : 'bg-brand-green-700 text-white hover:bg-brand-green-800 active:scale-[0.98] shadow-lg shadow-brand-green-700/20'
                   }`}
                 >
                   <HiShoppingCart size={20} />
-                  Review Order {cartArray.length > 0 && `• ${itemCount} item${itemCount > 1 ? 's' : ''} • $${total.toFixed(2)}`}
+                  Review Order {cartArray.length > 0 && `• ${itemCount} item${itemCount > 1 ? 's' : ''} • $${subtotal.toFixed(2)}`}
                 </button>
               ) : (
                 <div className="space-y-2.5">
@@ -421,7 +437,7 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
                     className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-base bg-[#25D366] hover:bg-[#20bd5a] text-white transition-all duration-300 active:scale-[0.98] shadow-lg shadow-[#25D366]/30"
                   >
                     <FiSend size={20} />
-                    Send Order via WhatsApp
+                    Open order in WhatsApp
                   </button>
                   <button
                     onClick={() => setStep('browse')}
@@ -431,8 +447,8 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
                   </button>
                 </div>
               )}
-              <p className="text-center text-[0.65rem] text-gray-300">
-                📍 {ADDRESS} • You will be redirected to WhatsApp to complete your order
+              <p className="text-center text-xs text-gray-600">
+                Send the prefilled message in WhatsApp and wait for B’licious to confirm.
               </p>
             </div>
           </motion.div>

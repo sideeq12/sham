@@ -1,5 +1,4 @@
 import heroBg from './A_bright,_ultra-realistic_commercial-style_image_202605031715.jpeg'
-import heroGif from './Create_an_8second_ultrarealistic_cinematic.gif'
 import heroDish from './A_premium_restaurant-style_hero_shot_202605031703.jpeg'
 import shawarmaClose from './An_ultra-realistic_creamy_chicken_shawarma_202605031628.jpeg'
 import beefWrap from './A_realistic_street-style_creamy_chicken_202605031658.jpeg'
@@ -22,7 +21,6 @@ import combo5 from './combo-5.jpeg'
 
 export {
   heroBg,
-  heroGif,
   heroDish,
   shawarmaClose,
   beefWrap,
